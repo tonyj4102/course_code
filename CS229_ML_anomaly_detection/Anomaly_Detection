@@ -1,0 +1,255 @@
+Book- “One Second After“
+
+slashed wires to alarms and critical equipment at the substation
+Gunmen knocked out 17 transformers , PG&E’s Metcalf facility ,2013
+FERC’s new rule, however, doesn’t extend to tens of thousands of smaller substations,
+burglarized equipment containers
+terrorism
+equipment problems and human error-large transmission line in Arizona to trip out of service-Sept. 8, 2011, San Diego was blacked out 11 minutes later (Traffic snarled. Flights were canceled. Raw sewage flowed into the ocean. )
+gunfire attack on the Metcalf substation, FERC required enhanced protection for individual substations
+attacks, both physical and cyber.
+slashed fiber-optic cables that serve Liberty, as well as the larger Mead substation near Hoover Dam.
+
+
+*must justify their expenses to regulatory agencies to pass on the costs to ratepayers
+
+
+
+
+
+http://www.wsj.com/articles/how-america-could-go-dark-1468423254
+
+
+Anomaly Detection
+
+Anomaly detection - Mathematica
+
+From a large set of primary care patient records, identify individuals who might have unusual health conditions.
+In a computer chip fabrication plant, identify microchips that might be defective.
+
+
+
+Visual – X1 vs X2 
+
+Dataset: (x(1), x(2), ….x(m)
+
+p(x)=∏j=1np(xj;μj,σj2).
+
+
+
+
+0->1
+normal
+anomalies
+
+x1
+= vibration intensity
+
+
+x1≈x2
+
+large x1
+
+
+x2
+
+= heat generated
+
+x1≈x2
+
+large x2
+
+
+X3
+
+(large x1, small x2)
+
+.8/.1=8 
+
+x3=x1x2
+
+
+
+Forecasting identify anomalies that are not expected to repeat.
+Column unusual weather data, economic trends, user trends, economic impacts
+
+Base case
+Delete missing data, then analyze
+Different types of anomalies may require different detection mechanisms 
+Create new variables
+Normalize the variables
+Different ϵ, for different types of outliers <- add to algorithm
+
+Assume normal 
+Build a model for p(x)
+If p(xtest)< E(epsilon) flag as an anomalies
+If p(xtest)>= E(epsilon) flag as an anomalies
+
+
+Normal distribution
+
+X(i) = features of users activities
+
+P(x)<epsilon  unusual + anomalies
+
+
+Gaussian density estimation = 1/sq. root(2*pie)*sigma exp(-(x-mu)^2)
+
+
+MAXIMUM LIKEHOOD ESTIMATES OF MU AND VARIANCE
+Average, sum of the sq. differences
+
+
+
+Unlabeled Training set of m feature vectors (x1,x2,x3 …)  --
+
+Assume independence or hypothesis (works well even through no independence)
+
+High prob features
+Low prob features
+
+P(x) = p(x1,mu1,sigma^2/1)*p(x2    )*p(x3       ) ….p(xn     )
+
+=  …….. product of probabilities
+
+
+
+Plot 2D density plot
+
+Set epsilon = 0.02  
+
+flag anomalies when p(x) is less than ε
+
+use cross-validation set to identfy anomalous data
+
+
+
+Evaluate anomaly detection algorithm
+Do I include this feature or not - add and test
+
+Assume we have some labeled data, of anomalous and non-anomalous examples. (y=0 if normal, y=1 if anomalous)
+
+Create training set by identifying outliers, and assigning data points to CV and Test.
+
+Split data:  
+60%-training –good data only - Fit p(x)  all Gaussian 
+20% - CV + 10 bad data points 
+20% - Test + 10 bad points
+
+y=1 (anomaly) or y=0 (normal)
+
+(Because data is skewed), classification accuracy is not a good metric
+
+-true positive, false positive, false negative, true negative
+-precision/recall
+-F1-score
+
+
+Developing and Evaluating an Anomaly Detection System
+-	Choosing no. of features
+
+Evaluate
+-	Assume labeled data
+
+1.	Assume have labeled data (anomalous/non-anomalous examples)
+2.	Y=0, non-anomalous examples
+3.	Training set x(1) x(2) – unlabeled training set /not anomalous
+4.	Cross-validation – have few anomalous
+5.	Test – have few anomalous 
+
+
+10,000 good (normal) engines
+20	flawed engines				2-150 of y=1
+
+Training set: 	6000   fit P(x)
+CV: 		2000, 10 anomalous (y=1)
+Test: 		2000, 10 anomalous (y=1)
+
+
+1.	Fit model p(x) on training set {x(1),…,x(m)}
+2.	On a cross validation/test example x, predict:
+If p(x)<ϵ (anomaly), then y=1
+
+Possible evaluation metrics (see "Machine Learning System Design" section):
+•	True positive, false positive, false negative, true negative.
+•	Precision/recall
+•	F1 score
+Note that we use the cross-validation set to choose parameter ϵ // try many values of epsilon, and pick the value that maximizes F1 score
+If p(x)≥ϵ (normal), then y=0
+Possible evaluation metrics (see "Machine Learning System Design" section):
+•	True positive, false positive, false negative, true negative.
+•	Precision/recall
+•	F1 score
+Note that we use the cross-validation set to choose parameter ϵ
+Anomaly Detection vs. Supervised Learning
+When do we use anomaly detection and when do we use supervised learning?
+Use anomaly detection when...
+•	We have a very small number of positive examples (y=1 ... 0-20 examples is common) and a large number of negative (y=0) examples.
+•	We have many different "types" of anomalies and it is hard for any algorithm to learn from positive examples what the anomalies look like; future anomalies may look nothing like any of the anomalous examples we've seen so far.
+
+Many different types of anomalies – hard for supervised learning to train. (Ang    )
+Future anomalies may be different
+
+Use supervised learning when...
+Future should be similar
+•	We have a large number of both positive and negative examples. In other words, the training set is more evenly divided into classes.
+•	We have enough positive examples for the algorithm to get a sense of what new positives examples look like. The future positive examples are likely similar to the ones in the training set.
+
+Anomaly detection
+
+Fruad detection
+Email spam classification
+Manufacturing (eg. Aircraft engines)
+Weather prediction (sunny/rainy/etc.)
+Monitoring machine in a data center
+Cancer classification
+
+
+Applications:
+Power utility, monitor your electric plants to see if any one of them might be behaving strangely
+Computer vision /security application – video images anyone in your company’s parking lot is acting in an unusual way
+Choosing What Features to Use
+The features will greatly affect how well your anomaly detection algorithm works.
+We can check that our features are gaussian by plotting a histogram of our data and checking for the bell-shaped curve.
+Some transforms we can try on an example feature x that does not have the bell-shaped curve are:
+•	log(x)
+•	log(x+1)
+•	log(x+c) for some constant
+•	x
+•	x1/3
+We can play with each of these to try and achieve the gaussian shape in our data.
+There is an error analysis procedure for anomaly detection that is very similar to the one in supervised learning.
+MIGHT BE HIDDEN ANOMALIES – NEED MORE DATA
+Our goal is for p(x) to be large for normal examples and small for anomalous examples. 
+
+One common problem is when p(x) is similar for both types of examples. In this case, you need to examine the anomalous examples that are giving high probability in detail and try to figure out new features that will better distinguish the data.
+In general, choose features that might take on unusually large or small values in the event of an anomaly.
+
+CHOOSE FEATURES:
+-	Very large or very small values for samples that might be anomalies
+-	More data 
+Multivariate Gaussian Distribution (Optional)
+The multivariate gaussian distribution is an extension of anomaly detection and may (or may not) catch more anomalies.
+Instead of modeling p(x1),p(x2),… separately, we will model p(x) all in one go. Our parameters will be: μ∈Rn and Σ∈Rn×n
+p(x;μ,Σ)=1(2π)n/2|Σ|1/2exp(−1/2(x−μ)TΣ−1(x−μ))
+The important effect is that we can model oblong gaussian contours, allowing us to better fit data that might not fit into the normal circular contours.
+Varying Σ changes the shape, width, and orientation of the contours. Changing μ will move the center of the distribution.
+Check also:
+•	The Multivariate Gaussian Distribution (pdf), Chuong B. Do, October 10, 2008. 
+Anomaly Detection using the Multivariate Gaussian Distribution (Optional)
+When doing anomaly detection with multivariate gaussian distribution, we compute μ and Σ normally. We then compute p(x) using the new formula in the previous section and flag an anomaly if p(x)<ϵ.
+The original model for p(x) corresponds to a multivariate Gaussian where the contours of p(x;μ,Σ) are axis-aligned.
+The multivariate Gaussian model can automatically capture correlations between different features of x.
+However, the original model maintains some advantages: it is computationally cheaper (no matrix to invert, which is costly for large number of features) and it performs well even with small training set size (in multivariate Gaussian model, it should be greater than the number of features for Σ to be invertible).
+
+
+
+
+
+
+
+
+
+
+
+
