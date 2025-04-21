@@ -1,0 +1,58 @@
+---
+title: "Hello Markdown"
+author: "Anthony James"
+date: "March 4, 2016"
+output: html_document
+---
+
+
+# Hello
+
+*hello
+
+can I have equations like $e^x$?
+$$\int_{0}{100} e^{\beta_0 X}$$
+This is a [link] (www.google.com)
+
+Rcode
+echo=false (only output will be printed)
+eval=T, results='hide'(see options list) - don't show the output
+
+```{r my 1stChunk, echo=FALSE, eval=TRUE}
+set.seed(1234)
+x<-rnorm(1000, mean = 0, sd = 1)
+quantile (x)
+
+````
+
+All libraries must be explictly called form Rmarkdown
+
+
+```{r warning=FALSE, message=FALSE, error=FALSE}
+
+library(ggplot2)
+
+```
+
+
+
+```{r fig.height=4}
+hist(x, main="Histogram of X", probability=T)
+plot(density(x0,col="red"))
+
+```
+
+
+```{r engine='python'}
+
+x= ="Hello, Python!"
+
+print(x)
+print(x.split())
+
+```
+
+
+Remove comments
+
+tidy=truetidy.opts=list(comments=FALSE)
