@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Introduction to Shiny</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Introduction to Shiny">
+  <meta name="author" content="Homer Strong">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Introduction to Shiny</h1>
+    <h2>UCI Data Science Initiative</h2>
+    <p>Homer Strong<br/>Department of Statistics</p>
+  </hgroup>
+    <a href="https://github.com/UCIDataScienceInitiative/AdvancedRWorkshop/zipball/gh-pages" class="example">
+     Download
+    </a>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>What is it</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>&quot;web application framework for R&quot;</li>
+<li>turns R code into interactive webpages</li>
+<li>easy</li>
+<li>flexible</li>
+<li>fun</li>
+<li>useful?!</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Goals for today</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>run first app</li>
+<li>cover tutorial topics</li>
+<li>mention more advanced topics</li>
+<li>interested in adminstering a UCI Shiny server? Ping me!</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Approximate schedule</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>basic concepts</li>
+<li>layouts &amp; UI</li>
+<li>server</li>
+<li>develop a simple example app</li>
+<li>exercise 1 (15min): your turn to make a simple app</li>
+<li>reactivity</li>
+<li>extensions</li>
+<li>sharing &amp; deployment</li>
+<li>exercise 2 (until lunch): something a little more complicated</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>UI and server</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>2 files; reasonable but not necessary</li>
+<li>UI
+
+<ul>
+<li>define form elements for user input</li>
+<li>specify where to put output from R</li>
+</ul></li>
+<li>server
+
+<ul>
+<li>take input from user</li>
+<li>???</li>
+<li>return output, e.g. plots, tables, etc</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>UI &amp; layout</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Skeletal version:</p>
+
+<pre><code>shinyUI(fluidPage(
+))
+</code></pre>
+
+<p>Sidebar layout with text:</p>
+
+<pre><code>shinyUI(fluidPage(
+  titlePanel(&quot;This is the title of the page&quot;),
+  sidebarLayout(
+    sidebarPanel(&quot;This text will be shown in the sidebar&quot;),
+    mainPanel(&quot;This text goes in the main part of the page&quot;)
+  )
+))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>sidebarLayout: good enough</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Shiny gives you plenty of control over layout. Today we&#39;ll stick with <code>sidebarLayout</code>.</p>
+
+<p>Besides the builtin helpers, it&#39;s possible to layout HTML elements directly.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Webpages of text are boring</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>2 key ingredients: <em>inputs</em> and <em>outputs</em>.</p>
+
+<p>Inputs are form elements for the user. You assign variable names to the user&#39;s  input. Shiny will provide those inputs as arguments to the server. Examples:</p>
+
+<ul>
+<li><code>selectInput</code> is a drop down box, user can select from a list.</li>
+<li><code>sliderInput</code> is a slider, user selects a number within a range.</li>
+</ul>
+
+<p>Outputs show R return values. The R code simply returns a list with named elements. Examples:</p>
+
+<ul>
+<li><code>textOutput</code> for when R returns text.</li>
+<li><code>plotOutput</code> for plots (!).</li>
+<li><code>dataTableOutput</code> for tables.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Adding an input to the layout</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code>shinyUI(fluidPage(
+  titlePanel(&quot;This is the title of the page&quot;),
+  sidebarLayout(
+    sidebarPanel(&quot;This text will be shown in the sidebar&quot;,
+                 sliderInput(&quot;n_samples&quot;, 
+                             label = &quot;Number of samples:&quot;,
+                             min = 1, max = 100, value = c(50))
+    ),
+    mainPanel(&quot;This text goes in the main part of the page&quot;,
+              textOutput(&quot;summaries&quot;), plotOutput(&quot;samplePlot&quot;))
+  )
+))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Server</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The user&#39;s input is stored in <code>input$n_samples</code> - this is because the first argument to <code>sliderInput</code> was <code>&quot;n_samples&quot;</code>! The server doesn&#39;t care what input it came from.</p>
+
+<pre><code>shinyServer(
+  function(input, output) {
+    output$summaries &lt;- renderText(paste(&quot;n:&quot;, input$n_samples))
+    output$samplePlot &lt;- renderPlot(hist(rnorm(input$n_samples)))
+  }
+)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>How the server code is executed</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>3 different cases!</p>
+
+<pre><code># Case 1: run once, when app is launched
+
+shinyServer(
+  function(input, output) {
+    # Case 2: run every time a user loads the app page
+    output$summaries &lt;- renderText({
+      # Case 3: run every time this input, n_samples, changes
+      paste(&quot;n:&quot;, input$n_samples)
+    })
+    output$samplePlot &lt;- renderPlot(hist(rnorm(input$n_samples)))
+  }
+)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Look at an example running app</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Navigate your web browser to</p>
+
+<pre><code>http://shiny.rstudio.com/gallery/faithful.html
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Many ways of launching an app</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s say you have a shiny app on your local file storage.</p>
+
+<ul>
+<li>R&#39;s command prompt, using the funciton <code>runApp</code></li>
+<li>the terminal, <code>R -e &quot;shiny::runApp(&#39;~/shinyapp&#39;)&quot;</code></li>
+<li>from RStudio, using the &quot;Run App&quot; in the top-right corner of the source panel. Rstudio seems to detect when the R file is for a shiny app.</li>
+</ul>
+
+<p>Shiny automatically re-loads on source file changes!... but only for <code>ui.r</code> and <code>server.r</code>.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Try running the hello world app!</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Download the repo [1] from GitHub, and open the <code>shiny/hello_world/ui.r</code> and <code>shiny/hello_world/server.r</code> files in RStudio. Then click on &quot;Run App&quot;, or execute</p>
+
+<pre><code>runApp(&#39;/change/this/path/AdvancedRWorkshop/shiny/hello_world&#39;)
+</code></pre>
+
+<p>[1] <a href="https://github.com/UCIDataScienceInitiative/AdvancedRWorkshop">https://github.com/UCIDataScienceInitiative/AdvancedRWorkshop</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Exercises</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>adding other controls
+
+<ul>
+<li>changing the mean</li>
+<li>chaning the standard deviation</li>
+</ul></li>
+<li>try switching to a &quot;tabset&quot; layout, with a separate tab for the summary stats (instead of having the summary stats in the same main panel as the graphic)</li>
+<li>add a drop-down menu which can change the distribution</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>A few words about how this works</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>the web depends on client-server architecture</li>
+<li>the idea is that many clients can connect to a single server</li>
+<li>the &quot;server&quot; can be your own laptop, or it could a computer in the basement, or a cloud server hosted by Amazon.</li>
+<li>client = the browser (for us).</li>
+<li>the browser handles the layout and the human interaction</li>
+<li>shiny provides code for <em>both</em> the client and the server.</li>
+<li>when the client and the server are communicating, they are basically sending back and forth R lists.</li>
+<li>the variety different languages/technologies is a big challenge in web development</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>More toys</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>renderTable</code> / <code>tableOutput</code> for simple tables</li>
+<li><code>renderText</code> / <code>verbatimTextOutput</code> for formattted R output</li>
+<li><code>renderPlot</code> / <code>renderPlot</code> for plots (ggplot2 works fine!)</li>
+<li><code>actionButton</code> for triggering actions on server</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>1 layout tip: Tab Sets</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In our previous example, we had the following main panel.</p>
+
+<pre><code>mainPanel(&quot;This text goes in the main part of the page&quot;,
+          textOutput(&quot;summaries&quot;), plotOutput(&quot;samplePlot&quot;))
+</code></pre>
+
+<p>If we have different types of output (e.g. plot, table, model output, etc) we can put each in a &quot;Tab Set&quot;, which goes in the main panel, like this:</p>
+
+<pre><code>mainPanel(
+    tabsetPanel(
+      tabPanel(&quot;Plot&quot;, plotOutput(&quot;diamond.plot&quot;)), 
+      tabPanel(&quot;Summary&quot;, textOutput(&quot;summaries&quot;)) 
+    )
+)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Tables</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><code>renderTable</code> / <code>tableOutput</code> for simple tables
+vs.</li>
+<li><code>renderDataTable</code> / <code>dataTableOutput</code> for ~fancy~ tables </li>
+</ul>
+
+<p>Data tables features include sorting, filtering, and paging. Named after the JavaScript library, DataTable, which is used to create the tables in the browser.</p>
+
+<p>Simple tables are fine for e.g. <code>head(my.data.frame)</code>, but generally DataTables are preferred because they are so much more flexible, and just as easy to include in your app.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Debugging Shiny apps</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>printing intput variables can only be done inside a reactive context.</li>
+<li><code>browser</code> is often much more useful
+
+<ul>
+<li>allows you to explore variables at any particular point in code</li>
+<li>&quot;breakpoint&quot;</li>
+<li>use <code>Q</code> to escape the <code>browser</code> environment</li>
+</ul></li>
+<li>(you can also use <code>browser</code> at any time!)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Advanced browsing</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Conditional browsing</h3>
+
+<p>Only trigger the browser when the user enters a certain input</p>
+
+<ul>
+<li>Only enter browser if the <code>price</code> input is greater than 2000:</li>
+<li><code>browser(expr=input$price &gt; 2000)</code></li>
+</ul>
+
+<h3>Custom error handling</h3>
+
+<p>This is also generally useful. Automatically enter browser on any error:</p>
+
+<pre><code>options(error = browser)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>DESCRIPTION</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>useful metadata for distribution</li>
+<li>also a way to enable <code>Showcase</code> mode</li>
+</ul>
+
+<pre><code>Title: My app
+Author: RStudio, Inc.
+AuthorUrl: http://www.rstudio.com/
+License: GPL-3
+DisplayMode: Showcase
+Tags: getting-started
+Type: Shiny
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Reactivity</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>programming style around <em>reacting</em> to user input</li>
+<li>you&#39;ve already seen examples: the <code>render*</code> functions!</li>
+<li>2 examples which illustrate reactivity controls.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Reactivity #1</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>observeEvent</code> triggers code in 2nd arg when 1st arg changes</p>
+
+<pre><code># in UI
+textInput(&quot;a&quot;, &quot;&quot;)
+actionButton(&quot;go&quot;, &quot;Click go!&quot;)
+
+# in server
+shinyServer(function(input, output){
+ observeEvent(input$go,
+              {
+                # do something special
+                # like start &quot;go&quot;ing
+              }
+      )
+})
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Reactivity #2: modularing reactions</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Useful if reactive context need to share objects.</p>
+
+<pre><code># in UI
+textInput(&quot;a&quot;, &quot;&quot;)
+textInput(&quot;b&quot;, &quot;&quot;)
+
+# in server, an output depends on a function of 2 inputs
+# so the output will change when either input changes
+shinyServer(function(input, output){
+  re &lt;- reactive({
+    paste(input$a, input$b)
+  })
+  # NB: re is a function!
+  output$z &lt;- renderText({ re() })
+})
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Interactive documents with RMarkdown</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>&quot;the ultimate R reporting tool&quot;</li>
+<li>RMarkdown documents have a YAML header</li>
+<li>see example</li>
+<li>how does RMarkdown which blocks are ui and which are server? IDK</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>So, to share an app...</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>It depends on whether your audience can run it from R.</p>
+
+<h3>From R</h3>
+
+<ul>
+<li><code>runApp</code>: local files</li>
+<li><code>runUrl</code>: downloadable files over the internet</li>
+<li><code>runGitHub</code>: apps whose source is on GitHub</li>
+<li><code>runGist</code>: apps whose source is in a Gist</li>
+</ul>
+
+<h3>Not from R</h3>
+
+<ul>
+<li>it must be on a server which can be reached by your audience.</li>
+<li>Shinyapps.io $$$</li>
+<li>Shiny Server (if anybody is interested in helping to help setup)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>Sharing</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>If the app is on GitHub, then it&#39;s easy to start it locally using the <code>runGitHub</code> function. e.g.</p>
+
+<pre><code>runGitHub(&quot;AdvancedRWorkshop&quot;, &quot;UCIDataScienceInitiative&quot;, subdir=&quot;shiny/hello_world&quot;)
+</code></pre>
+
+<p><code>runGist</code> is a similar function for running apps whose source is stored in gists.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>Very important stuff</h2>
+  </hgroup>
+  <article data-timings="">
+    <p class='..'>that is not covered today, but is interesting.</p>
+
+<ul>
+<li>can store/query data using databases, dropbox, AWS S3, etc</li>
+<li>plugins exist for mapping, 3D scatterplots, networks, various D3 charts.</li>
+<li>there&#39;s more reactivity stuff</li>
+<li>Shiny apps can be defined (e.g. in a library) as a single function</li>
+<li>it&#39;s easy to allow users to download data, e.g. data frames as CSV files</li>
+<li>layout is completely customizable</li>
+<li>seems like there&#39;s some support for interactive plots(!)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>Example use cases</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>exploring a new data set</li>
+<li>making an interface for humans to label data</li>
+<li>getting points on hacker news</li>
+<li>creating dashboards that monitor real-time data</li>
+<li>make friends and influencing others</li>
+<li>educational tools</li>
+<li>exploring Bayesian MCMC output: ShinyStan</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>Resources</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The official documentation from RStudio is pretty good. A few pointers:</p>
+
+<ul>
+<li>The cheatsheet is a great summary
+
+<ul>
+<li><a href="http://shiny.rstudio.com/images/shiny-cheatsheet.pdf">http://shiny.rstudio.com/images/shiny-cheatsheet.pdf</a></li>
+</ul></li>
+<li>The gallery has lots of useful examples of complete apps
+
+<ul>
+<li><a href="http://shiny.rstudio.com/gallery/">http://shiny.rstudio.com/gallery/</a></li>
+</ul></li>
+<li>the widget gallery isolated uses for all of the builtin widgets
+
+<ul>
+<li><a href="http://shiny.rstudio.com/gallery/widget-gallery.html">http://shiny.rstudio.com/gallery/widget-gallery.html</a></li>
+</ul></li>
+<li>non-Rstudio gallery
+
+<ul>
+<li><a href="http://www.showmeshiny.com/">http://www.showmeshiny.com/</a></li>
+<li>and companion twitter, @showmeshiny</li>
+</ul></li>
+<li>StackOverflow</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>Exercise 2</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>For this exercise, you are invited to do <em>whatever</em> you want with Shiny.</li>
+<li>Suggested exercise: build, from scratch, an app that will explore the <code>diamonds</code> dataset of ggplot2 fame.</li>
+<li>controls: scale, with 2 knobs, for subsetting the data</li>
+<li>the server should subset the data accordingly and return a plot of the data over that subset</li>
+<li>then add a checkbox for making the dots transparent</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='What is it'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Goals for today'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Approximate schedule'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='UI and server'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='UI &amp; layout'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='sidebarLayout: good enough'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='Webpages of text are boring'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='Adding an input to the layout'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Server'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='How the server code is executed'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Look at an example running app'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Many ways of launching an app'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Try running the hello world app!'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Exercises'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='A few words about how this works'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='More toys'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='1 layout tip: Tab Sets'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Tables'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Debugging Shiny apps'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Advanced browsing'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='DESCRIPTION'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Reactivity'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Reactivity #1'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Reactivity #2: modularing reactions'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Interactive documents with RMarkdown'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='So, to share an app...'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Sharing'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='Very important stuff'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Example use cases'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='Resources'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Exercise 2'>
+         31
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
